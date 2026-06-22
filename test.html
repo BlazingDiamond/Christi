@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Office Skills Examination — Word &amp; Excel</title>
+<style>
+  :root{
+    --paper:#FAF6EC;
+    --paper-card:#FBF8EF;
+    --ink:#202A3B;
+    --ink-soft:#5B6478;
+    --rule:#DCD2BD;
+    --margin-rule:#E3B9BD;
+    --gold:#B9851E;
+    --correct:#226B45;
+    --incorrect:#9C3140;
+    --shadow:0 1px 0 rgba(32,42,59,.05), 0 10px 24px -14px rgba(32,42,59,.45);
+    --font-display: Georgia, 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', serif;
+    --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    --font-mono: ui-monospace, 'SF Mono', 'Cascadia Code', 'Roboto Mono', Consolas, 'Liberation Mono', monospace;
+  }
+  .theme-neutral{ --accent:#5B6478; --accent-soft:#ECEAE2; }
+  .theme-word{ --accent:#2A56A0; --accent-soft:#E7EEF7; }
+  .theme-excel{ --accent:#226B45; --accent-soft:#E4F1E9; }
+  .theme-combo{ --accent:#9C3140; --accent-soft:#F5E7E8; }
+
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--font-body);
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  button{ font-family:inherit; cursor:pointer; }
+  button:focus-visible, a:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+  @media (prefers-reduced-motion: reduce){
+    *{ transition:none !important; animation:none !important; }
+  }
+
+  .masthead{
+    text-align:center;
+    padding:38px 20px 22px;
+    border-bottom:3px double var(--rule);
+    margin-bottom:30px;
+  }
+  .masthead .kicker{
+    font-size:.72rem;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--accent);
+    font-weight:700;
+  }
+  .masthead h1{
+    font-family:var(--font-display);
+    font-size:2.1rem;
+    margin:6px 0 6px;
+    letter-spacing:.01em;
+  }
+  .masthead p{
+    color:var(--ink-soft);
+    margin:0;
+    font-size:.95rem;
+  }
+
+  .wrap{ max-width:1020px; margin:0 auto; padding:0 20px 70px; }
+  .wrap.narrow{ max-width:760px; }
+
+  /* ---------- Menu ---------- */
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:34px 24px;
+  }
+  @media (max-width:760px){
+    .grid{ grid-template-columns:1fr; gap:46px 0; }
+  }
+  .folder{ position:relative; }
+  .folder .tab{
+    position:absolute;
+    top:-24px; left:16px;
+    padding:7px 16px 9px;
+    border-radius:7px 7px 0 0;
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:.74rem;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:#fff;
+  }
+  .folder.theme-word .tab{ background:var(--accent); }
+  .folder.theme-excel .tab{ background:var(--accent); }
+  .folder.theme-combo .tab{ background:var(--accent); }
+  .folder .card{
+    background:var(--paper-card);
+    border:1px solid var(--rule);
+    border-radius:4px;
+    box-shadow:var(--shadow);
+    padding:30px 24px 22px;
+    height:100%;
+    display:flex;
+    flex-direction:column;
+  }
+  .folder .card h2{
+    font-family:var(--font-display);
+    font-size:1.3rem;
+    margin:0 0 4px;
+    color:var(--ink);
+  }
+  .folder .card .count{
+    font-size:.78rem;
+    color:var(--accent);
+    font-weight:700;
+    letter-spacing:.04em;
+    margin-bottom:14px;
+  }
+  .folder .card .blurb{
+    font-size:.88rem;
+    color:var(--ink-soft);
+    margin:0 0 16px;
+    flex-grow:1;
+  }
+  .folder .card .topics{
+    display:flex; flex-wrap:wrap; gap:6px;
+    margin-bottom:20px;
+  }
+  .chip{
+    font-size:.7rem;
+    padding:3px 9px;
+    border-radius:999px;
+    background:var(--accent-soft);
+    color:var(--accent);
+    font-weight:600;
+    white-space:nowrap;
+  }
+  .begin-btn{
+    align-self:flex-start;
+    background:var(--accent);
+    color:#fff;
+    border:none;
+    padding:10px 18px;
+    border-radius:4px;
+    font-size:.86rem;
+    font-weight:700;
+    letter-spacing:.02em;
+  }
+  .begin-btn:hover{ filter:brightness(1.08); }
+
+  .footnote{
+    text-align:center;
+    color:var(--ink-soft);
+    font-size:.78rem;
+    margin-top:48px;
+    letter-spacing:.02em;
+  }
+
+  /* ---------- Quiz ---------- */
+  .quiz-top{
+    display:flex; align-items:center; justify-content:space-between;
+    margin-bottom:18px; flex-wrap:wrap; gap:10px;
+  }
+  .menu-link{
+    background:none; border:none; color:var(--ink-soft);
+    font-size:.82rem; padding:4px 0; text-decoration:underline;
+  }
+  .test-name{
+    font-family:var(--font-display);
+    color:var(--accent);
+    font-weight:700;
+    font-size:1.05rem;
+  }
+  .progress-line{
+    display:flex; align-items:center; gap:12px; margin-bottom:26px;
+  }
+  .progress-text{ font-size:.8rem; color:var(--ink-soft); white-space:nowrap; }
+  .progress-track{
+    flex-grow:1; height:6px; background:var(--rule);
+    border-radius:3px; overflow:hidden;
+  }
+  .progress-fill{ height:100%; background:var(--accent); transition:width .25s ease; }
+
+  .question-card{
+    position:relative;
+    background:var(--paper-card);
+    border:1px solid var(--rule);
+    border-radius:4px;
+    box-shadow:var(--shadow);
+    padding:26px 26px 26px 46px;
+    margin-bottom:22px;
+  }
+  .question-card::before{
+    content:''; position:absolute; left:30px; top:0; bottom:0; width:1px;
+    background:var(--margin-rule);
+  }
+  .eyebrow{
+    display:inline-block;
+    font-size:.68rem;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    font-weight:700;
+    color:var(--accent);
+    background:var(--accent-soft);
+    padding:3px 9px;
+    border-radius:999px;
+    margin-bottom:12px;
+  }
+  .q-text{
+    font-family:var(--font-display);
+    font-size:1.2rem;
+    margin:0 0 20px;
+    color:var(--ink);
+  }
+  .options{ display:flex; flex-direction:column; gap:10px; }
+  .option{
+    display:flex; align-items:flex-start; gap:12px;
+    text-align:left;
+    background:#fff;
+    border:1.5px solid var(--rule);
+    border-radius:5px;
+    padding:11px 14px;
+    font-size:.93rem;
+    color:var(--ink);
+    transition:border-color .15s, background .15s;
+  }
+  .option:hover{ border-color:var(--accent); }
+  .option.selected{ border-color:var(--accent); background:var(--accent-soft); }
+  .option .badge{
+    flex:none;
+    width:24px; height:24px;
+    border-radius:50%;
+    border:1.5px solid var(--rule);
+    display:flex; align-items:center; justify-content:center;
+    font-size:.74rem; font-weight:700; color:var(--ink-soft);
+  }
+  .option.selected .badge{ background:var(--accent); border-color:var(--accent); color:#fff; }
+  .option .label{ padding-top:2px; }
+  .mono{ font-family:var(--font-mono); font-size:.9em; }
+
+  .nav-row{ display:flex; justify-content:space-between; gap:12px; margin-top:8px; }
+  .nav-btn{
+    border:1.5px solid var(--rule);
+    background:#fff;
+    color:var(--ink);
+    padding:10px 18px;
+    border-radius:4px;
+    font-size:.86rem; font-weight:600;
+  }
+  .nav-btn:disabled{ opacity:.4; cursor:not-allowed; }
+  .nav-btn.primary{ background:var(--accent); border-color:var(--accent); color:#fff; }
+  .nav-btn.primary:disabled{ background:var(--rule); border-color:var(--rule); color:#fff; opacity:1; }
+  .hint{ font-size:.76rem; color:var(--ink-soft); text-align:center; margin-top:10px; }
+
+  /* ---------- Results ---------- */
+  .stamp{
+    width:148px; height:148px; margin:6px auto 8px;
+    border-radius:50%;
+    border:3px double var(--accent);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    color:var(--accent);
+    transform:rotate(-7deg);
+    font-family:var(--font-display);
+  }
+  .stamp .pct{ font-size:2.1rem; font-weight:700; line-height:1; }
+  .stamp .label{ font-size:.66rem; letter-spacing:.13em; text-transform:uppercase; margin-top:4px; }
+  .score-line{ text-align:center; color:var(--ink-soft); font-size:.95rem; margin-bottom:32px; }
+  .score-line b{ color:var(--ink); }
+
+  .breakdown{ margin-bottom:34px; }
+  .breakdown h3{ font-family:var(--font-display); font-size:1.05rem; margin:0 0 14px; }
+  .bd-row{ display:flex; align-items:center; gap:12px; margin-bottom:10px; }
+  .bd-name{ width:190px; font-size:.82rem; color:var(--ink-soft); flex:none; }
+  .bd-track{ flex-grow:1; height:8px; background:var(--rule); border-radius:4px; overflow:hidden; }
+  .bd-fill{ height:100%; background:var(--accent); }
+  .bd-frac{ width:42px; text-align:right; font-size:.78rem; color:var(--ink-soft); flex:none; }
+
+  .review h3{ font-family:var(--font-display); font-size:1.05rem; margin:0 0 16px; }
+  .rev-item{
+    background:var(--paper-card);
+    border:1px solid var(--rule);
+    border-radius:4px;
+    padding:18px 20px;
+    margin-bottom:14px;
+  }
+  .rev-q{ font-weight:700; font-size:.92rem; margin-bottom:10px; }
+  .rev-opt{
+    font-size:.85rem; padding:7px 10px; border-radius:4px; margin-bottom:6px;
+    border:1px solid var(--rule);
+  }
+  .rev-opt.correct-answer{ border-color:var(--correct); background:#EAF4EE; }
+  .rev-opt.wrong-pick{ border-color:var(--incorrect); background:#FAEAEC; }
+  .rev-tag{ font-size:.7rem; font-weight:700; letter-spacing:.04em; text-transform:uppercase; }
+  .rev-tag.ok{ color:var(--correct); }
+  .rev-tag.no{ color:var(--incorrect); }
+  .rev-explain{ font-size:.82rem; color:var(--ink-soft); margin-top:10px; padding-top:10px; border-top:1px dashed var(--rule); }
+  .rev-unanswered{ font-size:.8rem; color:var(--incorrect); font-style:italic; margin-bottom:6px; }
+
+  .result-actions{ display:flex; justify-content:center; gap:14px; margin-top:36px; flex-wrap:wrap; }
+</style>
+</head>
+<body class="theme-neutral">
+<div id="app"></div>
+
+<script>
+/* ============================= QUESTION DATA ============================= */
+
+const wordQuestions = [
+  { topic:`Hyperlinks`, q:`Which keyboard shortcut is commonly used to insert a hyperlink in a Word document?`,
+    options:[`Ctrl+K`,`Ctrl+H`,`Ctrl+L`,`Ctrl+U`], correct:0,
+    explain:`Ctrl+K opens the Insert Hyperlink dialog box in Word.` },
+  { topic:`Hyperlinks`, q:`Which feature must usually be created first before you can insert a hyperlink that jumps to a specific spot inside the same document?`,
+    options:[`A watermark`,`A bookmark`,`A footer`,`A text box`], correct:1,
+    explain:`Bookmarks mark a location so a hyperlink (or cross-reference) can jump straight to it.` },
+
+  { topic:`Watermarks`, q:`Where would you go to insert a watermark such as "DRAFT" or "CONFIDENTIAL"?`,
+    options:[`Insert tab`,`Design tab`,`Review tab`,`View tab`], correct:1,
+    explain:`Watermark is found in the Page Background group, typically on the Design tab.` },
+  { topic:`Watermarks`, q:`Which of the following best describes a watermark?`,
+    options:[`A clickable link embedded in text`,`Faded text or an image shown behind the main content on every page`,`A note added in the margin for reviewers`,`A repeating border around each paragraph`], correct:1,
+    explain:`A watermark sits behind the body text and repeats across pages.` },
+
+  { topic:`Headers & Footers`, q:`What is typically placed in a footer?`,
+    options:[`The document title only`,`Page numbers, dates, or file names`,`Hyperlinks to external websites only`,`The table of contents`], correct:1,
+    explain:`Footers commonly hold page numbers, dates, file paths, or author names.` },
+  { topic:`Headers & Footers`, q:`Which setting lets a document have a different header on the first page than on later pages?`,
+    options:[`Different First Page`,`Link to Previous`,`Different Odd & Even Pages`,`Watermark settings`], correct:0,
+    explain:`"Different First Page" is a header/footer option for excluding the first page's design.` },
+
+  { topic:`Paste Options`, q:`Which paste option pastes content while matching the formatting of the surrounding (destination) text?`,
+    options:[`Keep Source Formatting`,`Merge Formatting`,`Picture`,`Keep Text Only`], correct:1,
+    explain:`Merge Formatting adapts pasted text to match the destination's existing style.` },
+  { topic:`Paste Options`, q:`If you want to paste text without any of its original formatting, which option should you choose?`,
+    options:[`Keep Source Formatting`,`Merge Formatting`,`Keep Text Only`,`Paste as Object`], correct:2,
+    explain:`Keep Text Only strips all formatting, leaving plain text.` },
+
+  { topic:`Paragraph Spacing`, q:`Which dialog box lets you adjust the spacing before and after a paragraph?`,
+    options:[`Font dialog box`,`Paragraph dialog box`,`Page Setup dialog box`,`Styles pane`], correct:1,
+    explain:`Spacing before/after a paragraph is set in the Paragraph dialog box.` },
+  { topic:`Paragraph Spacing`, q:`Setting line spacing to "Double" means...`,
+    options:[`Each line of text is twice as tall as single spacing`,`Paragraphs are indented twice`,`Two spaces are added after each sentence`,`The font size doubles`], correct:0,
+    explain:`Line spacing controls the vertical gap between lines, not font size or indentation.` },
+
+  { topic:`Line & Page Breaks`, q:`What is the main purpose of inserting a manual page break?`,
+    options:[`To force following text to start on a new page, regardless of how much fits on the current page`,`To add a blank header`,`To change the page orientation`,`To insert a new section with different margins`], correct:0,
+    explain:`A manual page break simply pushes content to the next page.` },
+  { topic:`Line & Page Breaks`, q:`Pressing Shift+Enter inserts a ___, while pressing Enter inserts a ___.`,
+    options:[`line break; new paragraph`,`page break; section break`,`new paragraph; line break`,`tab; bullet`], correct:0,
+    explain:`Shift+Enter creates a line break within the same paragraph; Enter starts a new paragraph.` },
+
+  { topic:`Lists & Numbering`, q:`Which type of list automatically renumbers itself if you add or remove an item in the middle?`,
+    options:[`A numbered list created with the Numbering feature`,`Plain typed numbers`,`A bulleted list`,`A table of contents`], correct:0,
+    explain:`Word's automatic numbering recalculates the sequence whenever items change.` },
+  { topic:`Lists & Numbering`, q:`Bulleted lists are best used for...`,
+    options:[`Items that must show a strict sequence or ranking`,`Items where the order doesn't matter`,`Page numbers`,`Table headers`], correct:1,
+    explain:`Bullets imply an unordered set; numbering implies sequence.` },
+
+  { topic:`Multilevel Lists`, q:`A multilevel list is most useful for...`,
+    options:[`Showing a single flat set of unordered items`,`Representing a hierarchy, such as an outline with sub-points`,`Inserting page numbers`,`Creating a watermark`], correct:1,
+    explain:`Multilevel lists nest items to show outline-style hierarchy.` },
+  { topic:`Multilevel Lists`, q:`In a multilevel list, pressing Tab at the start of a line typically...`,
+    options:[`Demotes the item to the next lower level`,`Deletes the item`,`Converts the list to a table`,`Removes all numbering`], correct:0,
+    explain:`Tab demotes (indents) the item one level deeper; Shift+Tab promotes it.` },
+
+  { topic:`Styles`, q:`What is the main advantage of using built-in Heading styles instead of manually bolding and enlarging text?`,
+    options:[`Headings automatically appear in a Table of Contents and update consistently`,`It makes the file size smaller`,`It removes the need for spell check`,`It automatically inserts page breaks`], correct:0,
+    explain:`Heading styles are recognised by features like the automatic Table of Contents.` },
+  { topic:`Styles`, q:`If you modify the font used by the "Normal" style, what generally happens?`,
+    options:[`Only the currently selected text changes`,`All text based on the Normal style throughout the document updates to match`,`Nothing changes until you restart the program`,`Only headers and footers change`], correct:1,
+    explain:`Styles are global definitions — changing one updates every instance that uses it.` },
+];
+
+const excelQuestions = [
+  { topic:`Core Functions`, q:`Which function adds up a range of cells, such as A1:A10?`,
+    options:[`=AVERAGE(A1:A10)`,`=SUM(A1:A10)`,`=COUNT(A1:A10)`,`=PRODUCT(A1:A10)`], correct:1,
+    explain:`SUM adds all numeric values in the specified range.` },
+  { topic:`Core Functions`, q:`Which function returns the largest value in a range?`,
+    options:[`=MAX(range)`,`=LARGE(range) alone`,`=MIN(range)`,`=TOP(range)`], correct:0,
+    explain:`MAX returns the highest numeric value in a range.` },
+  { topic:`Core Functions`, q:`What does the COUNT function calculate?`,
+    options:[`The sum of numeric values`,`The number of cells containing numeric values in a range`,`The average of all values`,`The number of empty cells`], correct:1,
+    explain:`COUNT tallies how many cells in a range hold numbers.` },
+
+  { topic:`Math Functions`, q:`Which formula correctly raises 5 to the power of 3?`,
+    options:[`=POWER(5,3)`,`=POWER(3,5)`,`=5^POWER(3)`,`=SQRT(5,3)`], correct:0,
+    explain:`POWER(number, power) — so POWER(5,3) computes 5³.` },
+  { topic:`Math Functions`, q:`What does the formula =ROUND(8.376, 2) return?`,
+    options:[`8.38`,`8.37`,`8.4`,`8`], correct:0,
+    explain:`Rounding 8.376 to 2 decimal places looks at the third decimal (6) and rounds up to 8.38.` },
+  { topic:`Math Functions`, q:`Which function always rounds a number up, away from zero, no matter what the following digit is?`,
+    options:[`ROUND`,`ROUNDUP`,`ROUNDDOWN`,`TRUNC`], correct:1,
+    explain:`ROUNDUP rounds away from zero regardless of the digit that follows.` },
+
+  { topic:`IF Function`, q:`Which formula returns "Pass" if A1 is 50 or greater, and "Fail" otherwise?`,
+    options:[`=IF(A1>=50,"Pass","Fail")`,`=IF(A1>50,"Pass","Fail")`,`=IF(A1,"Pass","Fail",50)`,`=IF("Pass","Fail",A1>=50)`], correct:0,
+    explain:`The logical test must come first, followed by the true and false results.` },
+  { topic:`IF Function`, q:`In =IF(B2="Yes",10,0), what is the result if B2 contains the text "No"?`,
+    options:[`10`,`0`,`An error`,`A blank cell`], correct:1,
+    explain:`Since the condition is false, the value_if_false (0) is returned.` },
+  { topic:`IF Function`, q:`What are the three arguments of the IF function, in order?`,
+    options:[`logical_test, value_if_true, value_if_false`,`value_if_true, value_if_false, logical_test`,`condition, range, sum_range`,`cell, operator, result`], correct:0,
+    explain:`IF always evaluates a logical test first, then returns one of two results.` },
+
+  { topic:`Relational Operators`, q:`Which operator checks whether two values are NOT equal in Excel?`,
+    options:[`==`,`<>`,`!=`,`~=`], correct:1,
+    explain:`Excel uses <> to mean "not equal to".` },
+  { topic:`Relational Operators`, q:`Which relational expression correctly tests if A1 is less than or equal to 100?`,
+    options:[`A1=<100`,`A1<=100`,`A1=<100=`,`A1<100=`], correct:1,
+    explain:`The "less than or equal to" operator is written <=.` },
+
+  { topic:`Charts & Graphs`, q:`Which chart type is best for showing how parts make up a whole at a single point in time?`,
+    options:[`Line chart`,`Pie chart`,`Scatter (XY) chart`,`Box and whisker chart`], correct:1,
+    explain:`Pie charts show proportions of a whole at one moment in time.` },
+  { topic:`Charts & Graphs`, q:`Which chart type is most appropriate for showing a trend over time, such as monthly revenue?`,
+    options:[`Pie chart`,`Line chart`,`Doughnut chart`,`Radar chart`], correct:1,
+    explain:`Line charts excel at showing change across a continuous time axis.` },
+  { topic:`Charts & Graphs`, q:`In a chart, what does the legend do?`,
+    options:[`Shows the source data range as numbers`,`Identifies which colour or symbol corresponds to which data series`,`Sets the chart's title`,`Changes the chart type`], correct:1,
+    explain:`The legend maps colours/symbols to the data series they represent.` },
+
+  { topic:`Integration Techniques`, q:`Which formula correctly references cell A1 on a sheet named "Budget" from another sheet?`,
+    options:[`=Budget.A1`,`=Budget!A1`,`=Budget(A1)`,`=A1@Budget`], correct:1,
+    explain:`Cross-sheet references use SheetName!CellReference, e.g. Budget!A1.` },
+  { topic:`Integration Techniques`, q:`What is meant by "nesting" functions in Excel?`,
+    options:[`Placing one function inside another as an argument`,`Hiding a function from the formula bar`,`Linking two workbooks together`,`Formatting a cell with multiple fonts`], correct:0,
+    explain:`Nesting means using the result of one function as an input to another.` },
+  { topic:`Integration Techniques`, q:`When you copy a formula containing a relative reference like A1 down a column, what happens?`,
+    options:[`The reference stays exactly the same in every row`,`The reference automatically adjusts to match the new row, e.g. A2, A3`,`Excel converts it into an absolute reference`,`The formula becomes text`], correct:1,
+    explain:`Relative references shift automatically as a formula is copied.` },
+  { topic:`Integration Techniques`, q:`Which reference format keeps both the column and row fixed when a formula is copied to other cells?`,
+    options:[`A1`,`$A1`,`A$1`,`$A$1`], correct:3,
+    explain:`Dollar signs before both the column letter and row number lock an absolute reference.` },
+];
+
+const comboQuestions = [
+  { topic:`Hyperlinks`, q:`When you hover over a hyperlink in Word, what feature can display extra information about its destination?`,
+    options:[`ScreenTip`,`Watermark`,`Track Changes balloon`,`Footnote`], correct:0,
+    explain:`A ScreenTip pops up with details about where a hyperlink leads.` },
+  { topic:`Watermarks`, q:`Which of these is a common reason to add a watermark to a document?`,
+    options:[`To mark a document as a draft or confidential`,`To automatically number pages`,`To create a bulleted list`,`To check spelling`], correct:0,
+    explain:`Watermarks commonly flag status, such as "DRAFT" or "CONFIDENTIAL".` },
+  { topic:`Headers & Footers`, q:`Double-clicking inside the top margin of a page is a common way to...`,
+    options:[`Open the header for editing`,`Insert a hyperlink`,`Apply a watermark`,`Change paragraph spacing`], correct:0,
+    explain:`Double-clicking the top margin area activates header editing mode.` },
+  { topic:`Paste Options`, q:`The "Keep Source Formatting" paste option preserves...`,
+    options:[`The formatting from where the content was originally copied`,`The formatting of the destination document only`,`No formatting at all`,`Only the font colour`], correct:0,
+    explain:`Keep Source Formatting carries over the original styling intact.` },
+  { topic:`Paragraph Spacing`, q:`Adding extra space after a paragraph achieves a visual effect similar to...`,
+    options:[`Pressing Enter twice between paragraphs`,`Inserting a page break`,`Changing the page orientation`,`Applying a watermark`], correct:0,
+    explain:`Both create visible gaps between paragraphs, but spacing settings are cleaner and more consistent.` },
+  { topic:`Line & Page Breaks`, q:`Which type of break starts a new section with different margins or orientation, rather than just moving text to a new page?`,
+    options:[`Line break`,`Section break`,`Simple page break`,`Column break`], correct:1,
+    explain:`Section breaks allow different layout settings to apply to different parts of a document.` },
+  { topic:`Lists & Numbering`, q:`Which list type is generally most appropriate for step-by-step instructions that must be followed in order?`,
+    options:[`Bulleted list`,`Numbered list`,`Multilevel bullet list`,`Plain paragraph text`], correct:1,
+    explain:`Numbered lists communicate sequence, which suits step-by-step instructions.` },
+  { topic:`Styles`, q:`Using a consistent set of Styles throughout a long document mainly helps with...`,
+    options:[`Reducing the document's word count`,`Maintaining a consistent look and enabling features like an automatic table of contents`,`Preventing spelling errors`,`Automatically translating the document`], correct:1,
+    explain:`Styles keep formatting consistent and power features such as auto-generated TOCs.` },
+
+  { topic:`Core Functions`, q:`Which function would you use to find the average of a range of test scores?`,
+    options:[`=AVERAGE(range)`,`=MEDIAN(range)`,`=SUM(range)/COUNT`,`=MODE(range)`], correct:0,
+    explain:`AVERAGE calculates the arithmetic mean of a range.` },
+  { topic:`Math Functions`, q:`What does the SQRT function do?`,
+    options:[`Returns the square root of a number`,`Rounds a number to the nearest integer`,`Returns the absolute value`,`Raises a number to a power`], correct:0,
+    explain:`SQRT(number) returns that number's square root.` },
+  { topic:`IF Function`, q:`What will =IF(10>5,"True","False") return?`,
+    options:[`"True"`,`"False"`,`10`,`An error`], correct:0,
+    explain:`Since 10 is greater than 5, the logical test is true, so "True" is returned.` },
+  { topic:`Relational Operators`, q:`Which expression tests whether the value in A1 is greater than the value in B1?`,
+    options:[`A1>B1`,`A1=>B1`,`A1=>=B1`,`A1>>B1`], correct:0,
+    explain:`The greater-than operator is a single > symbol.` },
+  { topic:`Charts & Graphs`, q:`What is the purpose of axis titles on a chart?`,
+    options:[`To decorate the chart with colour`,`To describe what the values along each axis represent`,`To set the chart type`,`To merge two charts together`], correct:1,
+    explain:`Axis titles label what each axis is measuring, e.g. "Revenue ($)" or "Month".` },
+  { topic:`Charts & Graphs`, q:`Which chart type plots points from two numeric values and is useful for showing correlation between two variables?`,
+    options:[`Pie chart`,`Scatter (XY) chart`,`Bar chart`,`Doughnut chart`], correct:1,
+    explain:`Scatter charts plot paired numeric values to reveal relationships or correlation.` },
+  { topic:`Integration Techniques`, q:`What is a key benefit of linking worksheet data into another application, such as Word, rather than copying static numbers?`,
+    options:[`The linked data can automatically update if the source changes`,`It removes the need for formulas entirely`,`It converts numbers into images automatically`,`It prevents the data from ever changing`], correct:0,
+    explain:`Linked data refreshes automatically when the source file is updated.` },
+  { topic:`Integration Techniques`, q:`Which function is designed to combine a condition with a calculation, such as summing only the values that meet a criterion?`,
+    options:[`SUMIF`,`RANDBETWEEN`,`CONCATENATE`,`HYPERLINK`], correct:0,
+    explain:`SUMIF adds values in a range only when they meet a specified condition.` },
+
+  { topic:`Word Processing Basics`, q:`Which of these is generally a core feature of word processing software that distinguishes it from a plain text editor?`,
+    options:[`Rich text formatting such as fonts, bold, and alignment`,`Running spreadsheet formulas`,`Calculating cell totals`,`Creating pivot tables`], correct:0,
+    explain:`Word processors add formatting capability that plain text editors lack.` },
+  { topic:`Word Processing Basics`, q:`What does the term "WYSIWYG", often used to describe word processors, stand for?`,
+    options:[`What You See Is What You Get`,`Word You Save Is What's Graded`,`Write Your Style In Grammar`,`What You Save Is What's Generated`], correct:0,
+    explain:`WYSIWYG means the on-screen view closely matches the printed/final output.` },
+
+  { topic:`Linking Documents`, q:`What is the term for inserting an object, like an Excel chart, into a Word document so it stays connected to and updates from the original file?`,
+    options:[`Embedding only, with no connection`,`Linking`,`Watermarking`,`Bookmarking`], correct:1,
+    explain:`Linking keeps a live connection to the source file so changes can flow through.` },
+  { topic:`Linking Documents`, q:`Which Word feature lets you generate personalised letters by combining a main document with a data source such as a spreadsheet of names and addresses?`,
+    options:[`Mail Merge`,`Track Changes`,`SmartArt`,`Watermark`], correct:0,
+    explain:`Mail Merge combines a template document with records from a data source.` },
+  { topic:`Linking Documents`, q:`If you embed, rather than link, an Excel table into Word, what generally happens when the original Excel file is later updated?`,
+    options:[`The Word document automatically updates too`,`The embedded table in Word does not automatically update, since it is now a separate copy`,`Word deletes the embedded table`,`Excel locks the original file`], correct:1,
+    explain:`Embedding copies the data in; it no longer tracks changes to the source.` },
+
+  { topic:`Page Layout & Themes`, q:`What does a "theme" control in an Office document?`,
+    options:[`Only the spell-check language`,`A coordinated set of colours, fonts, and effects applied across the document`,`The number of columns in a table`,`The location of the file on disk`], correct:1,
+    explain:`Themes apply a consistent palette, font set, and effects throughout a file.` },
+  { topic:`Page Layout & Themes`, q:`Which page layout setting controls the blank space between the text and the edge of the page?`,
+    options:[`Margins`,`Orientation`,`Theme`,`Watermark`], correct:0,
+    explain:`Margins define the blank border space around the printable area.` },
+  { topic:`Page Layout & Themes`, q:`Switching a page from Portrait to Landscape orientation mainly affects...`,
+    options:[`The font used throughout the document`,`Which dimension, width or height, is longer on the page`,`The document's spelling`,`The number of hyperlinks allowed`], correct:1,
+    explain:`Orientation swaps which dimension of the page is longer.` },
+
+  { topic:`SmartArt`, q:`SmartArt graphics are mainly used to...`,
+    options:[`Visually represent information such as processes, hierarchies, or relationships`,`Check grammar`,`Insert page numbers`,`Create pivot tables`], correct:0,
+    explain:`SmartArt turns text into a visual diagram of structure or flow.` },
+  { topic:`SmartArt`, q:`Which SmartArt layout would best show a company's reporting structure — who reports to whom?`,
+    options:[`List`,`Hierarchy / Organization Chart`,`Process`,`Matrix`], correct:1,
+    explain:`Hierarchy/Org Chart layouts are designed for reporting structures.` },
+  { topic:`SmartArt`, q:`After inserting a SmartArt graphic, where do you typically type or edit the text for each shape?`,
+    options:[`Directly in the shapes, or in the attached Text Pane`,`Only in the footer`,`In a separate Excel workbook`,`In the Watermark dialog box`], correct:0,
+    explain:`SmartArt text can be typed straight into shapes or via its Text Pane.` },
+
+  { topic:`Tab Settings`, q:`Which type of tab stop aligns numbers so their decimal points line up vertically?`,
+    options:[`Left tab`,`Center tab`,`Right tab`,`Decimal tab`], correct:3,
+    explain:`A decimal tab stop aligns numbers on their decimal point.` },
+  { topic:`Tab Settings`, q:`What is a "tab leader"?`,
+    options:[`The first tab stop on the ruler`,`A repeating character, such as dots or dashes, that fills the space created when you press Tab, often used in a table of contents`,`A keyboard shortcut for tabs`,`A type of watermark`], correct:1,
+    explain:`Leaders fill tab gaps with repeating characters, common in a table of contents.` },
+  { topic:`Tab Settings`, q:`By default, where are tab stops typically placed if you have not set any custom ones?`,
+    options:[`At regular intervals across the ruler`,`Only at the very end of the page`,`There are no default tab stops`,`Only at the left margin`], correct:0,
+    explain:`Word provides default tab stops at regular intervals (often every 0.5 inch).` },
+];
+
+const TESTS = {
+  word: {
+    name:`Word Processing Test`,
+    theme:`theme-word`,
+    questions: wordQuestions,
+    blurb:`Hyperlinks, watermarks, headers &amp; footers, paste options, paragraph spacing, line &amp; page breaks, lists &amp; numbering, multilevel lists, and styles.`,
+    chips:[`Hyperlinks`,`Watermarks`,`Headers &amp; Footers`,`Paste Options`,`Paragraph Spacing`,`Breaks`,`Lists &amp; Numbering`,`Multilevel Lists`,`Styles`]
+  },
+  excel: {
+    name:`Excel Test`,
+    theme:`theme-excel`,
+    questions: excelQuestions,
+    blurb:`Core functions, math functions like POWER and ROUND, simple IF logic, relational operators, charts &amp; graphs, and integration techniques.`,
+    chips:[`Functions`,`POWER / ROUND`,`IF Function`,`Relational Operators`,`Charts &amp; Graphs`,`Integration`]
+  },
+  combo: {
+    name:`Combined Test`,
+    theme:`theme-combo`,
+    questions: comboQuestions,
+    blurb:`Fresh Word and Excel questions, plus word processing basics, linking documents, page layout &amp; themes, SmartArt, and tab settings.`,
+    chips:[`Word`,`Excel`,`Linking Documents`,`Page Layout &amp; Themes`,`SmartArt`,`Tab Settings`]
+  }
+};
+
+/* ============================= STATE ============================= */
+
+const state = {
+  view:'menu',
+  testKey:null,
+  qIndex:0,
+  answers:[]
+};
+
+const app = document.getElementById('app');
+
+function startTest(key){
+  state.testKey = key;
+  state.qIndex = 0;
+  state.answers = new Array(TESTS[key].questions.length).fill(null);
+  state.view = 'quiz';
+  document.body.className = TESTS[key].theme;
+  render();
+  window.scrollTo(0,0);
+}
+
+function selectOption(i){
+  state.answers[state.qIndex] = i;
+  render();
+}
+
+function goNext(){
+  const total = TESTS[state.testKey].questions.length;
+  if(state.qIndex < total - 1){ state.qIndex++; render(); window.scrollTo(0,0); }
+}
+function goPrev(){
+  if(state.qIndex > 0){ state.qIndex--; render(); window.scrollTo(0,0); }
+}
+function finishTest(){
+  state.view = 'results';
+  render();
+  window.scrollTo(0,0);
+}
+function retakeTest(){
+  startTest(state.testKey);
+}
+function backToMenu(){
+  state.view = 'menu';
+  state.testKey = null;
+  document.body.className = 'theme-neutral';
+  render();
+  window.scrollTo(0,0);
+}
+
+document.addEventListener('keydown', (e) => {
+  if(state.view !== 'quiz') return;
+  if(['1','2','3','4'].includes(e.key)){
+    const idx = parseInt(e.key,10) - 1;
+    const q = TESTS[state.testKey].questions[state.qIndex];
+    if(idx < q.options.length) selectOption(idx);
+  } else if(e.key === 'ArrowRight'){
+    goNext();
+  } else if(e.key === 'ArrowLeft'){
+    goPrev();
+  }
+});
+
+/* ============================= RENDERING ============================= */
+
+function render(){
+  if(state.view === 'menu') app.innerHTML = renderMenu();
+  else if(state.view === 'quiz') app.innerHTML = renderQuiz();
+  else app.innerHTML = renderResults();
+}
+
+function renderMenu(){
+  const cards = Object.keys(TESTS).map(key => {
+    const t = TESTS[key];
+    const chips = t.chips.map(c => `<span class="chip">${c}</span>`).join('');
+    return `
+      <div class="folder ${t.theme}">
+        <div class="tab">${t.name}</div>
+        <div class="card">
+          <h2>${t.name}</h2>
+          <div class="count">${t.questions.length} questions</div>
+          <p class="blurb">${t.blurb}</p>
+          <div class="topics">${chips}</div>
+          <button class="begin-btn" onclick="startTest('${key}')">Begin Test &rarr;</button>
+        </div>
+      </div>`;
+  }).join('');
+
+  return `
+    <div class="masthead">
+      <div class="kicker">Hi Christi, this is just a random test enjoy it</div>
+      <h1>Enjoy it, I have no experience with access or the other one i forgor its name</h1>
+      <p>This is mostly just a multiple choice question test so you can just answer it and it'll grade for you.</p>
+    </div>
+    <div class="wrap">
+      <div class="grid">${cards}</div>
+      <p class="footnote">66 questions across three tests &middot; Self-graded in your browser &middot; Nothing is sent anywhere</p>
+    </div>`;
+}
+
+function renderQuiz(){
+  const t = TESTS[state.testKey];
+  const q = t.questions[state.qIndex];
+  const total = t.questions.length;
+  const answered = state.answers[state.qIndex] !== null;
+  const isLast = state.qIndex === total - 1;
+  const letters = ['A','B','C','D'];
+
+  const optionsHtml = q.options.map((opt,i) => {
+    const selected = state.answers[state.qIndex] === i;
+    const isMono = opt.trim().startsWith('=') ? 'mono' : '';
+    return `
+      <button class="option ${selected ? 'selected' : ''}" onclick="selectOption(${i})" aria-pressed="${selected}">
+        <span class="badge">${letters[i]}</span>
+        <span class="label ${isMono}">${opt}</span>
+      </button>`;
+  }).join('');
+
+  return `
+    <div class="wrap narrow">
+      <div class="quiz-top">
+        <button class="menu-link" onclick="backToMenu()">&larr; Back to menu</button>
+        <div class="test-name">${t.name}</div>
+      </div>
+      <div class="progress-line">
+        <div class="progress-text">Question ${state.qIndex + 1} of ${total}</div>
+        <div class="progress-track"><div class="progress-fill" style="width:${((state.qIndex+1)/total*100).toFixed(1)}%"></div></div>
+      </div>
+      <div class="question-card">
+        <span class="eyebrow">${q.topic}</span>
+        <p class="q-text">${q.q}</p>
+        <div class="options">${optionsHtml}</div>
+      </div>
+      <div class="nav-row">
+        <button class="nav-btn" onclick="goPrev()" ${state.qIndex===0 ? 'disabled' : ''}>&larr; Previous</button>
+        ${isLast
+          ? `<button class="nav-btn primary" onclick="finishTest()" ${answered ? '' : 'disabled'}>Finish Test &rarr;</button>`
+          : `<button class="nav-btn primary" onclick="goNext()" ${answered ? '' : 'disabled'}>Next &rarr;</button>`}
+      </div>
+      ${answered ? '' : '<p class="hint">Select an answer to continue &middot; tip: press 1&ndash;4 to pick an option</p>'}
+    </div>`;
+}
+
+function gradeLabel(pct){
+  if(pct >= 85) return 'EXCELLENT';
+  if(pct >= 70) return 'PASS';
+  if(pct >= 50) return 'REVIEW';
+  return 'RETAKE';
+}
+
+function renderResults(){
+  const t = TESTS[state.testKey];
+  const qs = t.questions;
+  const total = qs.length;
+  let score = 0;
+  const byTopic = {};
+
+  qs.forEach((q,i) => {
+    if(!byTopic[q.topic]) byTopic[q.topic] = {correct:0, total:0};
+    byTopic[q.topic].total++;
+    if(state.answers[i] === q.correct){
+      score++;
+      byTopic[q.topic].correct++;
+    }
+  });
+
+  const pct = Math.round((score/total)*100);
+  const letters = ['A','B','C','D'];
+
+  const breakdownHtml = Object.keys(byTopic).map(topic => {
+    const b = byTopic[topic];
+    const p = Math.round((b.correct/b.total)*100);
+    return `
+      <div class="bd-row">
+        <div class="bd-name">${topic}</div>
+        <div class="bd-track"><div class="bd-fill" style="width:${p}%"></div></div>
+        <div class="bd-frac">${b.correct}/${b.total}</div>
+      </div>`;
+  }).join('');
+
+  const reviewHtml = qs.map((q,i) => {
+    const userIdx = state.answers[i];
+    const wasCorrect = userIdx === q.correct;
+    const optsHtml = q.options.map((opt,j) => {
+      let cls = '';
+      if(j === q.correct) cls = 'correct-answer';
+      else if(j === userIdx) cls = 'wrong-pick';
+      const tag = j === q.correct ? `<span class="rev-tag ok">Correct answer</span>` :
+                  (j === userIdx ? `<span class="rev-tag no">Your answer</span>` : '');
+      return `<div class="rev-opt ${cls}">${letters[j]}. ${opt} ${tag ? '&nbsp;&middot;&nbsp;'+tag : ''}</div>`;
+    }).join('');
+    return `
+      <div class="rev-item">
+        <span class="eyebrow">${q.topic}</span>
+        <div class="rev-q">${i+1}. ${q.q}</div>
+        ${userIdx === null ? '<p class="rev-unanswered">No answer selected</p>' : ''}
+        ${optsHtml}
+        <div class="rev-explain">${q.explain}</div>
+      </div>`;
+  }).join('');
+
+  return `
+    <div class="wrap narrow">
+      <div class="quiz-top">
+        <button class="menu-link" onclick="backToMenu()">&larr; Back to menu</button>
+        <div class="test-name">${t.name} &middot; Results</div>
+      </div>
+
+      <div class="stamp">
+        <div class="pct">${pct}%</div>
+        <div class="label">${gradeLabel(pct)}</div>
+      </div>
+      <p class="score-line">You answered <b>${score} of ${total}</b> questions correctly.</p>
+
+      <div class="breakdown">
+        <h3>Score by topic</h3>
+        ${breakdownHtml}
+      </div>
+
+      <div class="review">
+        <h3>Answer review</h3>
+        ${reviewHtml}
+      </div>
+
+      <div class="result-actions">
+        <button class="nav-btn primary" onclick="retakeTest()">Retake this test</button>
+        <button class="nav-btn" onclick="backToMenu()">Choose another test</button>
+      </div>
+    </div>`;
+}
+
+render();
+</script>
+</body>
+</html>
